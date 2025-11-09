@@ -1,0 +1,55 @@
+/* Centered hero and background blue glows */
+.hero {
+  position: relative;
+  background: radial-gradient(240px 240px at 15% 30%, rgba(47, 107, 237, 0.15), transparent 60%),
+    radial-gradient(260px 260px at 85% 40%, rgba(47, 107, 237, 0.16), transparent 60%),
+    linear-gradient(#ffffff, #f8fbff);
+  border-bottom: 1px solid var(--border);
+  /* Additional styles for hero component */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+.hero-inner {
+  text-align: center;
+  padding: 90px 0 70px;
+  /* Additional styles for hero inner component */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.hero-title {
+  font-size: clamp(2.2rem, 5vw + 1rem, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  /* Additional styles for hero title */
+  color: var(--primary-text);
+}
+.hero-title .blue {
+  color: var(--blue-600);
+}
+.hero-sub {
+  max-width: 900px;
+  margin: 22px auto 34px;
+  font-size: 18px;
+  /* Additional styles for hero subtitle */
+  color: var(--secondary-text);
+}
+.hero-cta {
+  display: flex;
+  justify-content: center;
+  /* Additional styles for hero call-to-action */
+  margin-top: 20px;
+}
+.hero-cta .btn {
+  font-size: 18px;
+  padding: 18px 28px;
+  border-radius: 14px;
+  /* Additional styles for hero button */
+  background-color: var(--blue-600);
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+.hero-cta .btn:hover {
+  background-color: var(--blue-800);
+}

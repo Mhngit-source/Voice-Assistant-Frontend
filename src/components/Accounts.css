@@ -1,0 +1,54 @@
+/* Accounts feature band styling */
+.acc {
+  background: #eaf2ff;
+  padding: 22px;
+  border-radius: 20px;
+  box-shadow: 0 18px 34px rgba(47, 107, 237, 0.12) inset, var(--shadow);
+}
+.acc-wrap {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 24px;
+  background: linear-gradient(#eef4ff, #eaf2ff);
+  border-radius: 16px;
+  padding: 28px;
+}
+@media (max-width: 900px) {
+  .acc-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+.acc-title {
+  font-size: clamp(1.4rem, 1rem + 1.6vw, 2rem);
+  margin: 6px 0 14px;
+}
+.acc-list {
+  display: grid;
+  gap: 12px;
+}
+.acc-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.acc-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  background: #e1eaff;
+  color: var(--blue-600);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.acc-dot svg {
+  width: 18px;
+  height: 18px;
+}
+.acc-image {
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 14px 30px rgba(2, 18, 62, 0.12), 0 4px 12px rgba(2, 18, 62, 0.08);
+}

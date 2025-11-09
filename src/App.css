@@ -1,0 +1,94 @@
+/* App-level utilities, palette, buttons, layout helpers */
+:root {
+  --blue-600: #2563eb;
+  --blue-500: #2f6bed;
+  --blue-100: #e9f0ff;
+  --blue-050: #f4f7ff;
+  --navy-900: #0b1222;
+  --navy-800: #0f1b32;
+  --text-900: #0f172a;
+  --text-700: #334155;
+  --border: #e5e7eb;
+  --white: #ffffff;
+  --shadow: 0 10px 20px rgba(2, 18, 62, 0.06), 0 2px 6px rgba(2, 18, 62, 0.05);
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+.container {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+}
+.section {
+  padding: 72px 0;
+}
+.btn {
+  appearance: none;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .05s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+  box-shadow: var(--shadow);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn-primary {
+  background: var(--blue-600);
+  color: var(--white);
+}
+.btn-primary:hover {
+  background: var(--blue-500);
+}
+.btn-outline {
+  background: var(--white);
+  color: var(--text-900);
+  border: 1px solid var(--border);
+}
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--text-700);
+  background: var(--blue-050);
+  border: 1px solid #ecf1ff;
+}
+.kicker svg {
+  width: 14px;
+  height: 14px;
+  color: var(--blue-600);
+}
+h1,
+h2,
+h3 {
+  margin: 0;
+  color: var(--text-900);
+}
+p {
+  color: var(--text-700);
+  line-height: 1.7;
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+}
+.grid-2 {
+  grid-template-columns: 1.1fr .9fr;
+}
+@media (max-width: 900px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
