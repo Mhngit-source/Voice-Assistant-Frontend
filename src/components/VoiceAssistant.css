@@ -1,112 +1,212 @@
-.voice-assistant-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 400px;
+.voice-control-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: white;
+  overflow-y: auto;
+}
+
+.voice-control-container {
+  margin-bottom: 32px;
+}
+
+.voice-control-button {
+  width: 160px;
+  height: 160px;
+  border: none;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+}
+
+.voice-control-button:hover {
+  transform: scale(1.05);
+  background: #1d4ed8;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
+}
+
+.voice-control-button.recording {
+  background: #dc2626;
+  animation: pulse-red 1.5s infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.25);
+  }
+  50% {
+    box-shadow: 0 12px 28px rgba(220, 38, 38, 0.4);
+  }
+}
+
+.voice-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-text {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.center-message {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.center-message p {
+  color: #1e293b;
+  font-size: 16px;
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.status-text {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #f1f5f9;
+  border-radius: 30px;
+  font-size: 12px;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.status-text.running,
+.status-text.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.status-text.error {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.status-text.stopped {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* Voice Commands - Two Column Grid */
+.voice-commands-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.voice-commands-container h4 {
+  margin: 0 0 24px 0;
+  color: #000000;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.voice-commands-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.command-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.command-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.command-item:hover {
+  border-color: #2563eb;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.command-icon {
+  font-size: 20px;
+  color: #2563eb;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.command-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.command-phrase {
+  font-weight: 600;
+  color: #000000;
+  font-size: 14px;
+}
+
+.command-desc {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .voice-control-tab {
     padding: 20px;
+  }
+  
+  .voice-control-button {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .voice-commands-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .command-item {
+    padding: 14px;
+  }
 }
 
-.voice-assistant-card {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    max-width: 400px;
-    width: 100%;
-}
-
-.voice-assistant-card h2 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-}
-
-.status-indicator {
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: bold;
-    margin-bottom: 25px;
-    display: inline-block;
-}
-
-.status-indicator.active {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.status-indicator.inactive {
-    background-color: #f44336;
-    color: white;
-}
-
-.status-indicator.error {
-    background-color: #ff9800;
-    color: white;
-}
-
-.voice-controls {
-    margin: 30px 0;
-}
-
-.start-btn, .stop-btn {
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: bold;
-}
-
-.start-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.start-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-.stop-btn {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
-}
-
-.stop-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
-}
-
-.instructions {
-    text-align: left;
-    margin-top: 25px;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 10px;
-}
-
-.instructions h4 {
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.instructions ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.instructions li {
-    padding: 5px 0;
-    color: #666;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
-}
-
-.instructions li:last-child {
-    border-bottom: none;
-    font-weight: bold;
-    color: #333;
+@media (max-width: 480px) {
+  .voice-control-button {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .button-text {
+    font-size: 13px;
+  }
 }

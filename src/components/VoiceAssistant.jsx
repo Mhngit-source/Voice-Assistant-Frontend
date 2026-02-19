@@ -1,107 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './VoiceAssistant.css';
 
-const VoiceAssistant = () => {
-    const [isListening, setIsListening] = useState(false);
-    const [status, setStatus] = useState('inactive');
+const VoiceAssistant = ({ isRecording, onToggleRecording, status }) => {
+  const commands = [
+    { icon: '🎵', command: '"Play music"', description: 'Plays random music' },
+    { icon: '⏰', command: '"Current time"', description: 'Tells current time' },
+    { icon: '📂', command: '"Open [app name]"', description: 'Opens applications' },
+    { icon: '🔍', command: '"Search Google [query]"', description: 'Searches on Google' },
+    { icon: '🎨', command: '"Generate image of [description]"', description: 'Creates AI image' },
+    { icon: '💭', command: '"Ask AI [question]"', description: 'Chat with AI' }
+  ];
 
-    const startListening = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/start', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            
-            const data = await response.json();
-            if (data.status === 'started' || data.status === 'already_running') {
-                setIsListening(true);
-                setStatus('active');
-            }
-        } catch (error) {
-            console.error('Error starting assistant:', error);
-            alert('Error starting MAN-I. Make sure the backend server is running.');
-        }
-    };
+  // Split commands into two columns
+  const leftColumn = commands.slice(0, 3);
+  const rightColumn = commands.slice(3, 6);
 
-    const stopListening = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/stop', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            
-            const data = await response.json();
-            if (data.status === 'stopped') {
-                setIsListening(false);
-                setStatus('inactive');
-            }
-        } catch (error) {
-            console.error('Error stopping assistant:', error);
-        }
-    };
+  return (
+    <div className="voice-control-tab">
+      {/* Centered Circle */}
+      <div className="voice-control-container">
+        <button 
+          className={`voice-control-button ${isRecording ? 'recording' : ''}`}
+          onClick={onToggleRecording}
+        >
+          <div className="voice-icon">
+            {isRecording ? (
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="6" width="12" height="12" rx="1"/>
+              </svg>
+            ) : (
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+              </svg>
+            )}
+          </div>
+          <span className="button-text">
+            {isRecording ? 'Stop Listening' : 'Tap to Speak'}
+          </span>
+        </button>
+      </div>
+      
+      <div className="center-message">
+        <p>
+          {isRecording 
+            ? 'MAN-I is listening... Speak your command' 
+            : 'Click the button to start speaking with MAN-I'
+          }
+        </p>
+        <small className={`status-text ${status}`}>
+          Status: {status.toUpperCase()}
+        </small>
+      </div>
 
-    // Check assistant status periodically
-    useEffect(() => {
-        const checkStatus = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/status');
-                const data = await response.json();
-                setStatus(data.status);
-                setIsListening(data.status === 'active');
-            } catch (error) {
-                console.error('Error checking status:', error);
-                setStatus('error');
-            }
-        };
-
-        const interval = setInterval(checkStatus, 3000);
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <div className="voice-assistant-container">
-            <div className="voice-assistant-card">
-                <h2>MAN-I Voice Assistant</h2>
-                <div className={`status-indicator ${status}`}>
-                    Status: {status.toUpperCase()}
+      {/* Voice Commands - Two Column Grid with Different Icons */}
+      <div className="voice-commands-container">
+        <h4>Available Voice Commands</h4>
+        <div className="voice-commands-grid">
+          <div className="command-column">
+            {leftColumn.map((cmd, index) => (
+              <div key={index} className="command-item">
+                <span className="command-icon">{cmd.icon}</span>
+                <div className="command-details">
+                  <span className="command-phrase">{cmd.command}</span>
+                  <span className="command-desc">{cmd.description}</span>
                 </div>
-                
-                <div className="voice-controls">
-                    {!isListening ? (
-                        <button 
-                            className="start-btn"
-                            onClick={startListening}
-                        >
-                            🎤 Tap to Speak
-                        </button>
-                    ) : (
-                        <button 
-                            className="stop-btn"
-                            onClick={stopListening}
-                        >
-                            ⏹️ Stop Listening
-                        </button>
-                    )}
+              </div>
+            ))}
+          </div>
+          <div className="command-column">
+            {rightColumn.map((cmd, index) => (
+              <div key={index} className="command-item">
+                <span className="command-icon">{cmd.icon}</span>
+                <div className="command-details">
+                  <span className="command-phrase">{cmd.command}</span>
+                  <span className="command-desc">{cmd.description}</span>
                 </div>
-                
-                <div className="instructions">
-                    <h4>Available Commands:</h4>
-                    <ul>
-                        <li>"Play music" - Plays random music</li>
-                        <li>"Current time" - Tells current time</li>
-                        <li>"Open [app name]" - Opens applications</li>
-                        <li>"Search Google [query]" - Searches on Google</li>
-                        <li>"Wikipedia [topic]" - Searches Wikipedia</li>
-                        <li>And many more...</li>
-                    </ul>
-                </div>
-            </div>
+              </div>
+            ))}
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default VoiceAssistant;
