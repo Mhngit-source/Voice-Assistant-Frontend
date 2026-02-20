@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ChatWindow.css';
 
-const ChatWindow = ({ user, onMessageSent }) => {
+const ChatWindow = ({ user, onMessageSent, onImageGenerated }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -134,33 +134,51 @@ const ChatWindow = ({ user, onMessageSent }) => {
     });
   };
 
+  // ============ HANDLE DOWNLOAD ============
+  const handleDownload = async (imageUrl, filename) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename || `man-i-image-${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Download error:', error);
+      // Fallback: open in new tab
+      window.open(imageUrl, '_blank');
+    }
+  };
+
   // ============ RENDER IMAGE IN CHAT ============
   const renderImageMessage = (msg) => {
+    const imageUrl = msg.imageUrl || msg.dataUrl;
+    const filename = `man-i-${msg.imageId || Date.now()}.png`;
+
     return (
       <div className="chat-image-container">
         <p>{msg.content}</p>
         <div className="generated-image-wrapper">
           <img 
-            src={msg.imageUrl || msg.dataUrl} 
+            src={imageUrl} 
             alt="Generated" 
             className="chat-generated-image"
-            onClick={() => window.open(msg.imageUrl || msg.dataUrl, '_blank')}
+            onClick={() => window.open(imageUrl, '_blank')}
             onError={(e) => {
-              console.error('Image failed to load:', msg.imageUrl);
+              console.error('Image failed to load:', imageUrl);
               e.target.src = 'https://via.placeholder.com/512x512/2563eb/ffffff?text=Image+Error';
             }}
           />
           <div className="chat-image-actions">
             <button 
               className="chat-image-btn download-btn"
-              onClick={() => {
-                const link = document.createElement('a');
-                link.href = msg.imageUrl || msg.dataUrl;
-                link.download = `man-i-image-${msg.imageId || Date.now()}.png`;
-                link.click();
-              }}
+              onClick={() => handleDownload(imageUrl, filename)}
             >
-              ⬇️ Download
+              Download
             </button>
           </div>
         </div>
@@ -238,6 +256,18 @@ const ChatWindow = ({ user, onMessageSent }) => {
             timestamp: new Date()
           };
           setMessages(prev => [...prev, imageMessage]);
+          
+          // Notify parent to add to gallery
+          if (onImageGenerated) {
+            onImageGenerated({
+              id: data.imageId || imageMessage.id,
+              prompt: prompt,
+              imageUrl: data.imageUrl,
+              dataUrl: data.dataUrl,
+              timestamp: new Date().toISOString(),
+              filename: data.filename || `image-${Date.now()}.png`
+            });
+          }
           
           if (onMessageSent) {
             onMessageSent();

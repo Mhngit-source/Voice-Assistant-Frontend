@@ -12,9 +12,8 @@ export default function Dashboard({ onLogout }) {
   const [activeTab, setActiveTab] = useState('chat');
   const [user, setUser] = useState(null);
   const [chats, setChats] = useState([]);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState([]); // Session-only images
   const [loading, setLoading] = useState(true);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // Load user data on mount
   useEffect(() => {
@@ -24,12 +23,10 @@ export default function Dashboard({ onLogout }) {
         if (userData) {
           const parsedUser = JSON.parse(userData);
           setUser(parsedUser);
-          
-          // Load user chats
+          // Load user chats (optional)
           fetchUserChats(parsedUser.id);
-          
-          // Load user images
-          fetchUserImages(parsedUser.id);
+          // Do NOT load images – start fresh
+          setImages([]);
         }
       } catch (error) {
         console.error('Error loading user data:', error);
@@ -39,7 +36,7 @@ export default function Dashboard({ onLogout }) {
     };
 
     loadUserData();
-  }, [refreshTrigger]);
+  }, []);
 
   // Check MAN-I status periodically
   useEffect(() => {
@@ -70,19 +67,6 @@ export default function Dashboard({ onLogout }) {
       }
     } catch (error) {
       console.error('Error fetching chats:', error);
-    }
-  };
-
-  // Fetch user images
-  const fetchUserImages = async (userId) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/images?userId=${userId}`);
-      const data = await response.json();
-      if (data.success) {
-        setImages(data.images || []);
-      }
-    } catch (error) {
-      console.error('Error fetching images:', error);
     }
   };
 
@@ -138,7 +122,6 @@ export default function Dashboard({ onLogout }) {
       if (data.success) {
         setChats([data.chat, ...chats]);
         setActiveTab('chat');
-        setRefreshTrigger(prev => prev + 1);
       }
     } catch (error) {
       console.error('Error creating chat:', error);
@@ -165,6 +148,11 @@ export default function Dashboard({ onLogout }) {
     }
   };
 
+  // Add newly generated image to gallery
+  const addImageToGallery = (imageData) => {
+    setImages(prev => [imageData, ...prev]);
+  };
+
   if (loading) {
     return (
       <div className="dashboard-loading">
@@ -183,7 +171,7 @@ export default function Dashboard({ onLogout }) {
           <p>AI Assistant</p>
         </div>
 
-        {/* Navigation Tabs */}
+        {/* Navigation Tabs – Chat, Voice, Gallery only */}
         <div className="sidebar-tabs">
           <button 
             className={`sidebar-tab ${activeTab === 'chat' ? 'active' : ''}`}
@@ -213,7 +201,7 @@ export default function Dashboard({ onLogout }) {
           simplified={true}
         />
 
-        {/* Back to Home Button - Blue */}
+        {/* Back to Home Button */}
         <div className="back-to-home-section">
           <button 
             className="back-to-home-btn"
@@ -233,10 +221,10 @@ export default function Dashboard({ onLogout }) {
         {activeTab === 'chat' && (
           <ChatWindow 
             user={user} 
+            onImageGenerated={addImageToGallery}
             onMessageSent={() => {
               setTimeout(() => {
                 refreshChats();
-                setRefreshTrigger(prev => prev + 1);
               }, 500);
             }}
           />
@@ -253,7 +241,6 @@ export default function Dashboard({ onLogout }) {
         {activeTab === 'gallery' && (
           <ImageGallery 
             images={images} 
-            onRefresh={() => fetchUserImages(user?.id)}
           />
         )}
       </div>

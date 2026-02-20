@@ -734,3 +734,81 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Add to ChatWindow.css */
+.chat-image-btn.download-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.chat-image-btn.download-btn:hover {
+  background: #1d4ed8;
+}
+
+/* Add to ChatWindow.css */
+.chat-image-container {
+  margin-top: 8px;
+}
+
+.generated-image-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.chat-generated-image {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-generated-image:hover {
+  transform: scale(1.02);
+}
+
+.chat-image-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Reuse the same professional download button style */
+.chat-image-actions .download-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.chat-image-actions .download-btn:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.4);
+  transform: scale(1.02);
+}
+
+.chat-image-actions .download-btn:active {
+  background: #1e3a8a;
+  transform: scale(0.98);
+}

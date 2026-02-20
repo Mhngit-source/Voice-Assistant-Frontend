@@ -76,7 +76,7 @@ router.post('/chat', async (req, res) => {
   }
 });
 
-// Generate image
+// Generate image – NO DATABASE SAVE
 router.post('/generate-image', async (req, res) => {
   try {
     const { prompt, userId } = req.body;
@@ -95,6 +95,7 @@ router.post('/generate-image', async (req, res) => {
       userId: userId || 'anonymous'
     }, { timeout: 60000 });
 
+    // Images are NOT saved to database – session-only on frontend
     res.json(response.data);
     
   } catch (error) {
@@ -106,33 +107,14 @@ router.post('/generate-image', async (req, res) => {
   }
 });
 
-// Get user images
+// Get user images – returns empty (session-only)
 router.get('/user-images/:userId', async (req, res) => {
-  try {
-    const response = await axios.get(
-      `${FLASK_SERVER_URL}/api/get-user-images/${req.params.userId}`,
-      { timeout: 5000 }
-    );
-    res.json(response.data);
-  } catch (error) {
-    console.error('❌ Get user images error:', error.message);
-    res.json({ success: true, images: [], count: 0 });
-  }
+  res.json({ success: true, images: [], count: 0 });
 });
 
-// Delete image
+// Delete image – dummy endpoint
 router.delete('/delete-image/:imageId', async (req, res) => {
-  try {
-    const { userId } = req.body;
-    const response = await axios.delete(
-      `${FLASK_SERVER_URL}/api/delete-image/${req.params.imageId}`,
-      { data: { userId: userId || 'anonymous' } }
-    );
-    res.json(response.data);
-  } catch (error) {
-    console.error('❌ Delete image error:', error.message);
-    res.json({ success: false, error: 'Failed to delete image' });
-  }
+  res.json({ success: true, message: 'Image deleted (simulated)' });
 });
 
 // Get chat history
